@@ -1,0 +1,9 @@
+[server]
+enableStaticServing = true
+
+[client]
+showSidebarNavigation =true
+showErrorDetails = false
+
+[global]
+disableWidgetStateDuplicationWarning = true
