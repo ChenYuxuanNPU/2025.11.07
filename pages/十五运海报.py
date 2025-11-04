@@ -1,3 +1,5 @@
+import sys
+from pathlib import Path
 from typing import Literal
 
 import streamlit as st
@@ -7,6 +9,15 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
+sys.path.append(
+    str(
+        Path(__file__).resolve().parent.parent
+    )
+)
+
+from func import *
+
 
 def display_centered_title(title: str, font_size: Literal[1, 2, 3, 4, 5, 6]) -> None:
     """
@@ -22,16 +33,19 @@ def display_centered_title(title: str, font_size: Literal[1, 2, 3, 4, 5, 6]) -> 
 
 
 display_centered_title(title=f"中华人民共和国第十五届运动会宣传海报", font_size=1)
+st.divider()
 
-l, m, r = st.columns(3)
 
-with l:
-    st.image("./static/十五运海报.png")
+with st.container(border=True):
+    l, m, r = st.columns(3)
 
-with m:
-    st.image("./static/十五运海报.jpg")
-    st.image("./static/十五运吉祥物.jpg")
+    with l:
+        st.image(f"{project_path}/pic/十五运海报.png")
 
-with r:
-    st.image("./static/十五运主题口号.jpg")
-    st.image("./static/十五运会徽.jpg")
+    with m:
+        st.image(f"{project_path}/pic/十五运吉祥物.jpg")
+        st.image(f"{project_path}/pic/十五运海报.jpg")
+
+    with r:
+        st.image(f"{project_path}/pic/十五运主题口号.jpg")
+        st.image(f"{project_path}/pic/十五运会徽.jpg")

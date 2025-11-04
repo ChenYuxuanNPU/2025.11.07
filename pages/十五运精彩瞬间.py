@@ -1,12 +1,23 @@
+import sys
+from pathlib import Path
 from typing import Literal
 
 import streamlit as st
 
 st.set_page_config(
     page_icon="🏅",
-    layout="centered",
+    layout="wide",
     initial_sidebar_state="expanded"
 )
+
+sys.path.append(
+    str(
+        Path(__file__).resolve().parent.parent
+    )
+)
+from func import *
+
+
 def display_centered_title(title: str, font_size: Literal[1, 2, 3, 4, 5, 6]) -> None:
     """
     居中显示标题
@@ -21,9 +32,17 @@ def display_centered_title(title: str, font_size: Literal[1, 2, 3, 4, 5, 6]) -> 
 
 
 display_centered_title(title=f"十五运精彩瞬间", font_size=1)
+st.divider()
 
-st.image("./static/图片一.jpg")
-st.image("./static/射击比赛.jpg")
-st.image("./static/射击比赛2.jpg")
-st.image("./static/气功比赛颁奖仪式.jpg")
-st.image("./static/十五运彩排.jpg")
+
+with st.container(border=True):
+    l, r = st.columns(spec=2)
+
+    with l:
+        st.image(f"{project_path}/pic/图片一.jpg")
+        st.image(f"{project_path}/pic/射击比赛.jpg")
+
+    with r:
+        st.image(f"{project_path}/pic/射击比赛2.jpg")
+        st.image(f"{project_path}/pic/气功比赛颁奖仪式.jpg")
+        st.image(f"{project_path}/pic/十五运彩排.jpg")
