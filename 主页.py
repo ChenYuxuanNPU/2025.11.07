@@ -1,6 +1,6 @@
-from typing import Literal
+from datetime import datetime, time
 
-import streamlit as st
+from func import *
 
 st.set_page_config(
     page_title="第十五届全运会资源中心",
@@ -71,19 +71,6 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-def display_centered_title(title: str, font_size: Literal[1, 2, 3, 4, 5, 6]) -> None:
-    """
-    居中显示标题
-    :param title: 标题内容
-    :param font_size: 标题字体大小，1最大，2开始逐渐变小
-    :return:
-    """
-    st.markdown(
-        body=f"<h{font_size} style='text-align: center;'>{title}</h{font_size}>",
-        unsafe_allow_html=True
-    )
-
-
 # 主页面内容
 def main():
     # 主标题区域
@@ -136,26 +123,27 @@ def main():
     st.markdown("""
     <div class="footer">
         <p>© 2025 广州市白云区教育研究院</p>
-        <p>建议使用 Chrome、Firefox 等现代浏览器访问以获得最佳体验</p>
+        <p>建议使用 Microsoft Edge 等现代浏览器访问以获得最佳体验</p>
     </div>
     """, unsafe_allow_html=True)
 
-    st.markdown(
-        """
-        <div style="text-align: center;">
-            <a href="" target="_blank" style="
-                display: inline-block;
-                padding: 10px 20px;
-                background-color: #4CAF50;
-                color: white;
-                text-decoration: none;
-                border-radius: 5px;
-                margin: 10px;
-            ">跳转到课堂小测</a>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+    if datetime.now().time() >= time(int(quiz_start_time.split(":")[0]), int(quiz_start_time.split(":")[1])):
+        st.markdown(
+            """
+            <div style="text-align: center;">
+                <a href="http://192.168.1.121:8502/" target="_blank" style="
+                    display: inline-block;
+                    padding: 10px 20px;
+                    background-color: #4CAF50;
+                    color: white;
+                    text-decoration: none;
+                    border-radius: 5px;
+                    margin: 10px;
+                ">跳转到课堂小测</a>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
 
 if __name__ == "__main__":
