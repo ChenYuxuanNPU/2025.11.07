@@ -123,7 +123,7 @@ def main():
     st.markdown("""
     <div class="footer">
         <p>© 2025 广州市白云区教育研究院</p>
-        <p>建议使用 Microsoft Edge 等现代浏览器访问以获得最佳体验</p>
+        <p>建议使用 Chrome、Firefox 等现代浏览器访问以获得最佳体验</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -131,7 +131,7 @@ def main():
         st.markdown(
             """
             <div style="text-align: center;">
-                <a href="http://192.168.1.121:8502/" target="_blank" style="
+                <a href="http://192.168.31.201:8502/" target="_blank" style="
                     display: inline-block;
                     padding: 10px 20px;
                     background-color: #4CAF50;
