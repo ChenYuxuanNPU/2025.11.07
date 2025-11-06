@@ -124,7 +124,24 @@ with mid:
                     [answer[0], round((end_time - st.session_state["start_time"]).total_seconds(), 1)])
 
                 write_dict_to_json(result, file_path=fr"{project_path}/quiz_result/result.json")
+
+                while True:
+
+                    temp_data = read_json_to_dict(file_path=fr"{project_path}/quiz_result/result.json")
+
+                    if str(answer[0]) not in temp_data[quiz_title]["班级原始答案"][class_name].keys():
+                        temp_data[quiz_title]["班级原始答案"][class_name][answer[0]] = answer[1:]
+                        temp_data[quiz_title]["班级答题用时"][class_name].append(
+                            [answer[0], round((end_time - st.session_state["start_time"]).total_seconds(), 1)])
+
+                        write_dict_to_json(data=temp_data, file_path=fr"{project_path}/quiz_result/result.json")
+
+                    else:
+                        break
+
                 st.toast("提交成功！", icon="😋")
+                st.balloons()
+
                 st.session_state["submitted_answer"] = answer[1:]
             else:
                 st.toast("只能提交一次喔！", icon="😇")
@@ -137,12 +154,11 @@ with mid:
             for i in range(len(answer)):
                 if answer[i] is None:
                     unanswered_questions.append(i)
-            st.toast(f"第{"，".join(str(_) for _ in unanswered_questions)}题未回答！", icon="😯")
+            st.toast(f"第{','.join(str(_) for _ in unanswered_questions)}题未回答！", icon="😯")
 
 
     _, mid_1, _ = st.columns([7, 1, 7])
 
     with mid_1:
         st.button("提交", on_click=submit_single_result,
-                  disabled=True if st.session_state["submitted_answer"] else False,
-                  type="primary")
+                  disabled=True if st.session_state["submitted_answer"] else False, type="primary")
