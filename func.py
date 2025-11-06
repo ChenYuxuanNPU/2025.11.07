@@ -155,7 +155,7 @@ def draw_bar_chart(data: pd.DataFrame | dict, title: str, height: int = 0, axis_
     return None
 
 
-def calculate_discrete_total_scores(std_ans: list | set, stu_ans: list[list]) -> list[list]:
+def calculate_discrete_total_scores(std_ans: list | set, stu_ans: list[list]) -> dict:
     """
     获取标准答案列表和学生作答列表，返回一个字典
     :param std_ans: 标准答案，字符串列表
@@ -173,17 +173,19 @@ def calculate_discrete_total_scores(std_ans: list | set, stu_ans: list[list]) ->
     return output
 
 
-def convert_to_frequency_dict(letter_list: list) -> dict:
+def convert_to_frequency_dict(letter_list: list, max_letter: str = None) -> dict:
     """
     将大写字母列表转换为带顺序的字典，且补全中间缺漏的大写字母
     :param letter_list: 原大写字母列表
+    :param max_letter: 最大的选项序号
     :return: 频数字典，键为字母，值为频数
     """
     if not letter_list:  # 处理空列表情况
         return {}
 
     # 找到列表中最大的字母
-    max_letter = max(letter_list)
+    if max_letter is None:
+        max_letter = max(letter_list)
 
     # 统计频数
     counter = Counter(letter_list)

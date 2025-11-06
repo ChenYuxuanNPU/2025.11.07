@@ -1,4 +1,5 @@
 import string
+import struct
 import sys
 from pathlib import Path
 
@@ -41,7 +42,7 @@ st.divider()
 
 data = raw_data.get(quiz_name, None)
 
-if quiz_name and current_class:
+if quiz_name and current_class and len(data["班级原始答案"][current_class].keys()) > 0:
     standard_answer = data["答案"].values()
     student_answers = list(data["班级原始答案"][current_class].values())
 
@@ -55,7 +56,7 @@ if quiz_name and current_class:
         with l:
             draw_bar_chart(
                 data=calculate_total_scores(std_ans=list(standard_answer), stu_ans=list(student_answers)),
-                title="得分情况"
+                title="总体得分情况"
             )
 
             draw_bar_chart(
@@ -71,7 +72,7 @@ if quiz_name and current_class:
                     data=sorted(
                         [[key, calculate_score(list_std=list(standard_answer), list_stu=value)] for key, value in
                          raw_data[quiz_name]["班级原始答案"][class_name].items()], key=lambda x: x[1], reverse=True)[
-                         :15],
+                        :15],
                     columns=['学生学号', '练习结果']
                 ),
                 hide_index=False,
@@ -105,11 +106,18 @@ if quiz_name and current_class:
                 with l:
 
                     draw_bar_chart(
-                        data=convert_to_frequency_dict([item[i - 1] for item in list(value for value in
-                                                                                     raw_data.get(quiz_title, {}).get(
-                                                                                         "班级原始答案", {}).get(
-                                                                                         class_name, {}).values())]),
-                        title="本题得分情况"
+                        data=convert_to_frequency_dict(letter_list=[item[i - 1] for item in list(value for value in
+                                                                                                 raw_data.get(
+                                                                                                     quiz_title,
+                                                                                                     {}).get(
+                                                                                                     "班级原始答案",
+                                                                                                     {}).get(class_name,
+                                                                                                             {}).values())],
+                                                       max_letter=chr(
+                                                           64 + len(
+                                                               raw_data.get(quiz_title, {}).get("题目选项", {}).get(
+                                                                   f"题目{i}", {})))),
+                        title=f"第{i}题得分情况"
                     )
 
                 with r:
@@ -137,8 +145,12 @@ if quiz_name and current_class:
                         st.info(
                             f'本题正确率为：{accuracy}%，正确答案为：{raw_data.get(quiz_title, {}).get("答案", {}).get(f"题目{i}", None)}')
 
-                    else:
+                    elif accuracy > 25:
                         st.warning(
+                            f'本题正确率为：{accuracy}%，正确答案为：{raw_data.get(quiz_title, {}).get("答案", {}).get(f"题目{i}", None)}')
+
+                    else:
+                        st.error(
                             f'本题正确率为：{accuracy}%，正确答案为：{raw_data.get(quiz_title, {}).get("答案", {}).get(f"题目{i}", None)}')
 
                     st.radio(
