@@ -40,9 +40,8 @@ with st.container(border=True):
 
     with l:
         st.image(f"{project_path}/pic/图片一.jpg")
-        st.image(f"{project_path}/pic/射击比赛.jpg")
+        st.image(f"{project_path}/pic/吉祥物.jpg")
 
     with r:
-        st.image(f"{project_path}/pic/射击比赛2.jpg")
         st.image(f"{project_path}/pic/气功比赛颁奖仪式.jpg")
         st.image(f"{project_path}/pic/十五运彩排.jpg")

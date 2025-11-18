@@ -34,7 +34,7 @@ display_centered_title(title=f"中华人民共和国第十五届运动会简介"
 st.divider()
 with st.container(border=True):
     st.write("""
-    中华人民共和国第十五届运动会（The 15th National Games of the People's Republic of China，简称：第十五届全国运动会）将于2025年11月9日至21日举行，由广东、香港、澳门三地共同举办，并将于11月9日在广州开幕。
+    **中华人民共和国第十五届运动会（The 15th National Games of the People's Republic of China，简称：第十五届全国运动会）将于2025年11月9日至21日举行，由广东、香港、澳门三地共同举办，并将于11月9日在广州开幕。**
     
     开幕式和闭幕式分别在广州和深圳举行。十五运会分为竞体比赛和群众赛事活动，其中竞体比赛设34个大项419个小项，群众赛事活动设23个大项166个小项。
     
