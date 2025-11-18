@@ -14,7 +14,7 @@ from streamlit_echarts import st_pyecharts
 project_path = os.path.dirname(os.path.abspath(__file__))
 
 quiz_start_time = "8:20"  # 11.15
-class_name = "七年8班"
+class_name = "七年10班"
 quiz_route = fr"{project_path}\quiz\七年级第三单元第二节——网站开发前的准备.xlsx"
 
 quiz_title = os.path.splitext(os.path.basename(quiz_route))[0]
@@ -145,7 +145,7 @@ def draw_bar_chart(data: pd.DataFrame | dict, title: str, height: int = 0, axis_
                           ),
                           )
 
-    chart.set_series_opts(label_opts=opts.LabelOpts(position="top"))
+    chart.set_series_opts(label_opts=opts.LabelOpts(position="top", is_show=False))
 
     st_pyecharts(
         chart=chart,

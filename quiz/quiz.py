@@ -2,6 +2,7 @@ import copy
 import datetime
 import string
 import sys
+import time
 from pathlib import Path
 
 sys.path.append(
@@ -13,6 +14,7 @@ sys.path.append(
 from func import *
 
 st.set_page_config(
+    page_title="课堂练习",
     page_icon="🏅",
     layout="wide",
     initial_sidebar_state="collapsed"
@@ -136,6 +138,8 @@ with mid:
 
                         write_dict_to_json(data=temp_data, file_path=fr"{project_path}/quiz_result/result.json")
 
+                        time.sleep(1)
+
                     else:
                         break
 
@@ -157,7 +161,7 @@ with mid:
             st.toast(f"第{','.join(str(_) for _ in unanswered_questions)}题未回答！", icon="😯")
 
 
-    _, mid_1, _ = st.columns([7, 1, 7])
+    _, mid_1, _ = st.columns([5.5, 1, 5.5])
 
     with mid_1:
         st.button("提交", on_click=submit_single_result,

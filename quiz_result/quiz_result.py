@@ -1,5 +1,4 @@
 import string
-import struct
 import sys
 from pathlib import Path
 
@@ -12,6 +11,7 @@ sys.path.append(
 from func import *
 
 st.set_page_config(
+    page_title="课堂练习情况",
     page_icon="🏅",
     layout="wide",
     initial_sidebar_state="collapsed"
@@ -51,7 +51,7 @@ if quiz_name and current_class and len(data["班级原始答案"][current_class]
 
         st.divider()
 
-        l, r1, r2 = st.columns([2, 1, 1])
+        l, r = st.columns([2, 1])
 
         with l:
             draw_bar_chart(
@@ -63,34 +63,55 @@ if quiz_name and current_class and len(data["班级原始答案"][current_class]
                 data=calculate_discrete_total_scores(std_ans=list(standard_answer), stu_ans=list(student_answers)),
                 title="各题正确人数"
             )
-        with r1:
+        with r:
             st.info("得分情况前十五排名")
             st.divider()
 
+            # 计算所有学生的学号和成绩，按成绩降序排列
+            list_2 = sorted(
+                [[key, calculate_score(list_std=list(standard_answer), list_stu=value)] for key, value in
+                 raw_data[quiz_name]["班级原始答案"][class_name].items()], key=lambda x: x[1], reverse=True)
+            # 获取dataframe的左列序号列
+            list_1 = [i for i in range(1, len(list_2) + 1)]
+            list_3 = []
+
+            # list_3用来保存每个学生的答题用时，一维列表
+            for item in list_2:
+                stu_id = item[0]
+                for item_1 in data.get("班级答题用时",{}).get(class_name,{}):
+                    if str(item_1[0]) == str(stu_id):
+                        list_3.append(item_1[1])
+
+            list_for_df = []
+
+            for i in range(len(list_1)):
+                list_for_df.append(list_2[i])
+                list_for_df[-1].append(list_3[i])
+
+            list_for_df = sorted(list_for_df, key=lambda x: (-x[1], x[2]))
+            list_for_df = [[one_item] + two_item for one_item, two_item in zip(list_1, list_for_df)]
+
             st.dataframe(
                 data=pd.DataFrame(
-                    data=sorted(
-                        [[key, calculate_score(list_std=list(standard_answer), list_stu=value)] for key, value in
-                         raw_data[quiz_name]["班级原始答案"][class_name].items()], key=lambda x: x[1], reverse=True)[
-                        :15],
-                    columns=['学生学号', '练习结果']
+                    data=list_for_df[:15],
+                    columns=['排名', '学生学号', '练习得分', '答题用时']
                 ),
-                hide_index=False,
+                hide_index=True,
                 height=650
             )
 
-        with r2:
-            st.info("完成速度前十五排名")
-            st.divider()
-
-            st.dataframe(
-                data=pd.DataFrame(
-                    data=sorted(raw_data[quiz_name]["班级答题用时"][class_name], key=lambda x: x[1])[:15],
-                    columns=['学生学号', '答题用时'],
-                ),
-                hide_index=False,
-                height=650
-            )
+        # with r2:
+        #     st.info("完成速度前十五排名")
+        #     st.divider()
+        #
+        #     st.dataframe(
+        #         data=pd.DataFrame(
+        #             data=sorted(raw_data[quiz_name]["班级答题用时"][class_name], key=lambda x: x[1])[:15],
+        #             columns=['学生学号', '答题用时'],
+        #         ),
+        #         hide_index=False,
+        #         height=650
+        #     )
 
     st.divider()
 
@@ -154,7 +175,7 @@ if quiz_name and current_class and len(data["班级原始答案"][current_class]
                             f'本题正确率为：{accuracy}%，正确答案为：{raw_data.get(quiz_title, {}).get("答案", {}).get(f"题目{i}", None)}')
 
                     st.radio(
-                        f'**{i}.{raw_data.get(quiz_title, {}).get("题目内容", {}).get(f'题目{i}', "")}**',
+                        f'**{i}.{raw_data.get(quiz_title, {}).get("题目内容", {}).get(f"题目{i}", "")}**',
                         [fr"**{chara}.{item}**" for chara, item in
                          zip(list(string.ascii_uppercase[:len([f"**{items}**" for items in
                                                                raw_data.get(quiz_title, {}).get("题目选项", {}).get(
