@@ -1,0 +1,62 @@
+import sys
+import os
+from pathlib import Path
+from typing import Literal
+
+import streamlit as st
+
+sys.path.append(
+    str(
+        Path(__file__).resolve().parent.parent
+    )
+)
+from func import *
+
+def display_centered_title(title: str, font_size: Literal[1, 2, 3, 4, 5, 6]) -> None:
+    """
+    居中显示标题
+    :param title: 标题内容
+    :param font_size: 标题字体大小，1最大，2开始逐渐变小
+    :return:
+    """
+    st.markdown(
+        body=f"<h{font_size} style='text-align: center;'>{title}</h{font_size}>",
+        unsafe_allow_html=True
+    )
+
+
+st.set_page_config(
+    page_icon="🏅",
+    layout="centered",
+    initial_sidebar_state="expanded"
+)
+
+display_centered_title(title=f"奥运冠军刘宇坤超世界纪录摘金", font_size=2)
+st.divider()
+
+with st.container(border=True):
+
+    st.write("&emsp;&emsp;10月17日，十五运会射击（步手枪）比赛进入倒数第二个比赛日的争夺，在男子50米步枪3种姿势决赛场上，奥运冠军刘宇坤、张常鸿、杨皓然同场竞技，广东射击馆成了世界级“神枪手”的风云际会之地。")
+
+    st.image(f"{project_path}/pic/新闻报道图片.jpg")
+
+    st.write("""
+    **奥运冠军同场竞技**
+    
+    　　射击比赛现场星光熠熠，明星师徒在此展开紧张激烈的“斗法”，包括王义夫、杜丽、陶璐娜、易思玲等在内的多位奥运冠军到场助阵。
+    
+    　　在男子50米步枪3种姿势决赛中，奥运冠军刘宇坤、张常鸿、杨皓然同场竞技，结果，杨皓然和张常鸿第一和第四位被淘汰出局，陕西队的刘宇坤则一路遥遥领先，最终以470.1环的绝对优势夺冠。
+    
+    　　这个成绩超过了他自己创造的世界纪录，刘宇坤由此收获本届全运会个人第二金。
+    
+    　　赛后，刘宇坤表示，巴黎奥运会后自己休息调整了一段时间。“赛前一个月才恢复训练，身体有点发福，但状态还在。这次参加十五运会，就是奔着金牌和破纪录来的，比赛过半我就心中有数了，状态很好，就破了世界纪录，毕竟这个纪录的成绩也不高。”
+    
+    　　有趣的是，在比赛过程中，刘宇坤一度领先第二名将近6环。或许是夺冠过程太轻松，摄像机捕捉到了他打哈欠的画面，在这样的顶级大赛上还是如此放松，恐怕也只有刘宇坤能做到。
+    
+    **运动员被广州美食吸引**
+    
+    　　在奥运冠军陶璐娜的督战下，上海队在女子10米气手枪团体决赛中战胜河北队，获得金牌，河北队、广西队分别获得亚军和季军。此前，在女子10米气手枪团体资格赛中，上海队姜冉馨、沈奕瑶、张绮以1745环平全国纪录、超世界纪录。
+    
+    　　十五运会将于11月9日开幕，但前期很多比赛已经陆续开打，陶璐娜在广州督战，对“广式服务”印象深刻。
+    
+    　　“广州赛区的赛事保障服务很规范，相关的配套也做得很好。”陶璐娜说，“我们想在比赛结束以后再好好感受一下广州的全运氛围，这里的美食也非常吸引人。”""")
