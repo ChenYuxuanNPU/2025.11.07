@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML实时预览编辑器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            padding: 15px;
+            gap: 15px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 15px 0;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+        
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+        }
+        
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: flex;
+            flex: 1;
+            gap: 15px;
+            min-height: 0;
+            overflow: hidden;
+        }
+        
+        .editor-section, .preview-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        
+        .section-header {
+            padding: 12px 20px;
+            background: #2c3e50;
+            color: white;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        
+        .section-content {
+            flex: 1;
+            overflow: auto;
+            position: relative;
+        }
+        
+        #html-editor {
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            border: none;
+            resize: none;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            background: #f8f9fa;
+            color: #2c3e50;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            box-sizing: border-box;
+        }
+        
+        #preview-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: white;
+            display: block;
+        }
+        
+        .preview-container {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+        
+        .file-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        button {
+            padding: 8px 16px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 12px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            border-top: 1px solid #eaeaea;
+            flex-shrink: 0;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .editor-section, .preview-section {
+                min-height: 40vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>HTML实时预览编辑器</h1>
+            <p>在左侧编辑HTML代码，右侧实时查看效果</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="editor-section">
+                <div class="section-header">
+                    <span>HTML代码编辑器</span>
+                    <div class="file-controls">
+                        <button id="save-btn">保存HTML</button>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <textarea id="html-editor" placeholder="在此输入HTML代码...">&lt;body&gt;
+    &lt;div class="container"&gt;
+        &lt;header&gt;
+            &lt;img src="pic/十五运logo.png" class="logo"&gt;
+            &lt;h1&gt;激情全运会，活力大湾区，魅力新广州&lt;/h1&gt;
+        &lt;/header&gt;
+
+        &lt;section class="content-section"&gt;
+            &lt;h2&gt;关于十五运&lt;/h2&gt;
+            &lt;p&gt;十五运简介&lt;/p&gt;
+        &lt;/section&gt;
+
+        &lt;section class="content-section"&gt;
+            &lt;h2&gt;精彩瞬间&lt;/h2&gt;
+            &lt;div class="image-gallery"&gt;
+                &lt;img src="pic/" alt="十五运精彩图像一"&gt;
+                &lt;img src="pic/羽毛球颁奖.jpg" alt="十五运精彩图像二"&gt;
+            &lt;/div&gt;
+        &lt;/section&gt;
+
+        &lt;section class="content-section"&gt;
+            &lt;h2&gt;赛事新闻&lt;/h2&gt;         
+                    &lt;p&gt;10月17日，十五运会射击（步手枪）比赛进入倒数第二个比赛日的争夺，在男子50米步枪3种姿势决赛场上，奥运冠军刘宇坤、张常鸿、杨皓然同场竞技，广东射击馆成了世界级“神枪手”的风云际会之地。&lt;/p&gt;
+            &lt;div class="image-full"&gt;
+                &lt;img src="pic/射击比赛.jpg" alt="十五运赛事配图"&gt;
+                &lt;img src="pic/end.png"&gt;
+            &lt;/div&gt;
+        &lt;/section&gt;
+
+        &lt;footer&gt;
+            &lt;p&gt;© 2025 广州市白云区同和中学七年级（）班——（姓名）&lt;/p&gt;
+            &lt;p&gt;素材来源：&lt;/p&gt;
+            &lt;p&gt;链接1：&lt;/p&gt;
+            &lt;p&gt;链接2：&lt;/p&gt;
+        &lt;/footer&gt;
+    &lt;/div&gt;
+&lt;/body&gt;</textarea>
+                </div>
+            </div>
+            
+            <div class="preview-section">
+                <div class="section-header">
+                    <span>实时预览</span>
+                </div>
+                <div class="section-content">
+                    <div class="preview-container">
+                        <iframe id="preview-frame"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>HTML实时预览编辑器 &copy; 2025 | 在左侧编辑代码，右侧实时预览效果</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const htmlEditor = document.getElementById('html-editor');
+            const previewFrame = document.getElementById('preview-frame');
+            const saveBtn = document.getElementById('save-btn');
+            
+            // 基础HTML结构
+            const baseHTML = `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>欢迎来到广州市第十五届运动会</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #4CAF50;
+            margin-bottom: 20px;
+        }
+        .logo {
+            width: 80%;
+            max-width: 600px;
+            height: auto;
+            margin-bottom: 15px;
+        }
+        h1 {
+            color: #4CAF50;
+            margin: 10px 0;
+        }
+        .intro {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        .content-section {
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #2196F3;
+            border-left: 4px solid #2196F3;
+            padding-left: 10px;
+        }
+        .image-gallery {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        .image-gallery img {
+            width: 45%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .image-full {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        .image-full img {
+            width: 95%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+            font-size: 0.9em;
+            color: #777;
+        }
+    </style>
+</head>
+`;
+            
+            // 更新预览
+            function updatePreview() {
+                const bodyContent = htmlEditor.value;
+                const fullHTML = baseHTML + bodyContent + '\n</html>';
+                const previewDocument = previewFrame.contentDocument || previewFrame.contentWindow.document;
+                
+                previewDocument.open();
+                previewDocument.write(fullHTML);
+                previewDocument.close();
+                
+                // 设置iframe内容高度，防止内部滚动条
+                setTimeout(() => {
+                    const iframeBody = previewFrame.contentDocument.body;
+                    const iframeHtml = previewFrame.contentDocument.documentElement;
+                    const height = Math.max(
+                        iframeBody.scrollHeight, 
+                        iframeBody.offsetHeight,
+                        iframeHtml.clientHeight,
+                        iframeHtml.scrollHeight,
+                        iframeHtml.offsetHeight
+                    );
+                    previewFrame.style.height = height + 'px';
+                }, 100);
+            }
+            
+            // 初始预览
+            updatePreview();
+            
+            // 监听编辑器内容变化
+            htmlEditor.addEventListener('input', updatePreview);
+            
+            // 保存HTML文件
+            saveBtn.addEventListener('click', function() {
+                const bodyContent = htmlEditor.value;
+                const fullHTML = baseHTML + bodyContent + '\n</html>';
+                const blob = new Blob([fullHTML], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'edited-page.html';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
+            
+            // 添加键盘快捷键
+            document.addEventListener('keydown', function(e) {
+                if (e.ctrlKey || e.metaKey) {
+                    if (e.key === 's') {
+                        e.preventDefault();
+                        saveBtn.click();
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
